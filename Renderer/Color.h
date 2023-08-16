@@ -28,10 +28,10 @@ public:
 	unsigned char* GetRaw();
 	void SetRaw(unsigned char raw[]);
 
-	double GetR();
-	double GetG();
-	double GetB();
-	double GetA();
+	double GetR() const;
+	double GetG() const;
+	double GetB() const;
+	double GetA() const;
 
 	void SetR(double r);
 	void SetG(double g);
@@ -39,5 +39,7 @@ public:
 	void SetA(double a);
 
 	Color& operator =(const Color &c);
+	Color operator*(double t);
+	Color operator+(const Color& obj);
 };
 

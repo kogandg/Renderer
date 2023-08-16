@@ -68,22 +68,22 @@ void Color::SetRaw(unsigned char raw[])
 	}
 }
 
-double Color::GetR()
+double Color::GetR() const
 {
 	return (double)(r)/255.0f;
 }
 
-double Color::GetG()
+double Color::GetG() const
 {
 	return (double)(g) / 255.0f;
 }
 
-double Color::GetB()
+double Color::GetB() const
 {
 	return (double)(b) / 255.0f;
 }
 
-double Color::GetA()
+double Color::GetA() const
 {
 	return (double)(a) / 255.0f;
 }
@@ -117,5 +117,15 @@ Color& Color::operator=(const Color& c)
 	}
 
 	return *this;
+}
+
+Color Color::operator*(double t)
+{
+	return Color(GetR()*t, GetG()*t, GetB()*t);
+}
+
+Color Color::operator+(const Color& obj)
+{
+	return Color(GetR() + obj.GetR(), GetG() + obj.GetG(), GetB() + obj.GetB());
 }
 
