@@ -1,41 +1,23 @@
+#include "Helpers.h"
+
 #include <iostream>
-#include <math.h>
 
 #include "Color.h"
 #include "TGAImage.h"
-#include "Vector3.h"
-#include "Ray.h"
+#include "Hittable.h"
+#include "HittableList.h"
+#include "Sphere.h"
 
 using namespace std;
 
-double hitSphere(const Vector3& center, double radius, const Ray& r)
-{
-	Vector3 oc = r.GetOrigin() - center;
-	//quaradic equation
-	double a = r.GetDirection().Dot(r.GetDirection());
-	double b = oc.Dot(r.GetDirection()) * 2.0;
-	double c = oc.Dot(oc) - (radius * radius);
-	double discriminant = (b * b) - (4 * a * c);
-
-	if (discriminant < 0)
+Color rayColor(const Ray& ray) {
+	HitRecord record;
+	if (HittableList::Get().Hit(ray, Interval(0, Infinity), record))
 	{
-		return -1.0;
-	}
-	else
-	{
-		return (-b - sqrt(discriminant)) / (2.0 * a);
-	}
-}
-
-Color rayColor(const Ray& r) {
-	double t = hitSphere(Vector3(0, 0, -1), 0.5, r);
-	if (t > 0.0)
-	{
-		Vector3 normal = (r.At(t) - Vector3(0, 0, -1)).Unit();
-		return Color(normal.X + 1, normal.Y + 1, normal.Z + 1) * 0.5;
+		return Color(record.Normal.X + 1, record.Normal.Y + 1, record.Normal.Z + 1) * 0.5;
 	}
 
-	Vector3 unitDirection = r.GetDirection().Unit();
+	Vector3 unitDirection = ray.GetDirection().Unit();
 	double a = (unitDirection.Y + 1.0) * 0.5;
 	return Color(1.0, 1.0, 1.0) * (1.0 - a) + Color(0.5, 0.7, 1.0) * a;
 }
@@ -54,6 +36,10 @@ int main()
 	}
 
 	TGAImage image(imageWidth, imageHeight, 4);
+	
+	//Wolrd
+	HittableList::Get().Add(make_shared<Sphere>(Vector3(0, 0, -1), 0.5));
+	HittableList::Get().Add(make_shared<Sphere>(Vector3(0, -100.5, -1), 100));
 
 	//Camera
 	double focalLength = 1.0;
