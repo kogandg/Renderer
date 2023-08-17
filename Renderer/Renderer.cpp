@@ -70,8 +70,8 @@ int main()
 	Vector3 pixelDeltaV = viewportV / imageHeight;
 
 	//Calc location of upper left pixel
-	Vector3 viewportUpperLeft = cameraCenter - Vector3(0, 0, focalLength) - viewportU / 2 - viewportV / 2;
-	Vector3 pixel0Center = viewportUpperLeft + (pixelDeltaU + pixelDeltaV) * 0.5;
+	Vector3 viewportUpperLeft = cameraCenter - Vector3(0, 0, focalLength) - (viewportU / 2) - (viewportV / 2);
+	Vector3 pixel0Center = viewportUpperLeft + ((pixelDeltaU + pixelDeltaV) * 0.5);
 
 	//Render
 	for (int y = 0; y < imageHeight; y++)

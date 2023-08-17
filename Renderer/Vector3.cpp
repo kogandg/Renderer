@@ -43,8 +43,7 @@ Vector3 Vector3::Cross(const Vector3& v)
 
 Vector3 Vector3::Unit()
 {
-	double length = Length();
-	return Vector3(X/length, Y/length, Z/length);
+	return *this / Length();
 }
 
 Vector3 Vector3::operator-() const

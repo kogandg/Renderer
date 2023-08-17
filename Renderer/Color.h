@@ -16,6 +16,9 @@ private:
 		unsigned int value;
 	};
 
+	void matchRaws();
+	void matchReals();
+
 public:
 	Color();
 	Color(unsigned char r, unsigned char g, unsigned char b, unsigned char a);
@@ -25,18 +28,13 @@ public:
 	Color(const Color& c);
 	Color(const unsigned char* p, int bpc);
 
+	double R;
+	double G;
+	double B;
+	double A;
+
 	unsigned char* GetRaw();
 	void SetRaw(unsigned char raw[]);
-
-	double GetR() const;
-	double GetG() const;
-	double GetB() const;
-	double GetA() const;
-
-	void SetR(double r);
-	void SetG(double g);
-	void SetB(double b);
-	void SetA(double a);
 
 	Color& operator =(const Color &c);
 	Color operator*(double t);

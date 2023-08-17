@@ -13,7 +13,7 @@ Ray::Ray(const Vector3& origin, const Vector3& direction)
 
 Vector3 Ray::At(double t) const
 {
-	return origin + direction*t;
+	return origin + (direction*t);
 }
 
 Vector3 Ray::GetOrigin() const

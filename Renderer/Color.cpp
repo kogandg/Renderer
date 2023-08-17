@@ -1,10 +1,28 @@
 #include "Color.h"
 
+void Color::matchRaws()
+{
+	r = R * 255;
+	g = G * 255;
+	b = B * 255;
+	a = A * 255;
+}
+
+void Color::matchReals()
+{
+	R = (double)(r) / 255.0;
+	G = (double)(g) / 255.0;
+	B = (double)(b) / 255.0;
+	A = (double)(a) / 255.0;
+}
+
+
 Color::Color()
 {
 	value = 0;
 	bytesPerColor = 1;
 }
+
 
 Color::Color(unsigned char r, unsigned char g, unsigned char b, unsigned char a)
 {
@@ -13,36 +31,44 @@ Color::Color(unsigned char r, unsigned char g, unsigned char b, unsigned char a)
 	this->b = b;
 	this->a = a;
 	bytesPerColor = 4;
+	matchReals();
 }
 
 Color::Color(double r, double g, double b, double a)
 {
-	SetR(r);
-	SetG(g);
-	SetB(b);
-	SetA(a);
+	R = r;
+	G = g;
+	B = b;
+	A = a;
 	bytesPerColor = 4;
+	matchRaws();
 }
 
 Color::Color(double r, double g, double b)
 {
-	SetR(r);
-	SetG(g);
-	SetB(b);
-	a = 255;
+	R = r;
+	G = g;
+	B = b;
+	A = 1;
 	bytesPerColor = 4;
+	matchRaws();
 }
 
 Color::Color(int val, int bpc)
 {
 	value = val;
 	bytesPerColor = bpc;
+	matchReals();
 }
 
 Color::Color(const Color& c)
 {
-	value = c.value;
+	R = c.R;
+	G = c.G;
+	B = c.B;
+	A = c.A;
 	bytesPerColor = c.bytesPerColor;
+	matchRaws();
 }
 
 Color::Color(const unsigned char* p, int bpc)
@@ -53,59 +79,22 @@ Color::Color(const unsigned char* p, int bpc)
 	{
 		raw[i] = p[i];
 	}
+	matchReals();
 }
 
 unsigned char* Color::GetRaw()
 {
+	matchRaws();
 	return raw;
 }
 
 void Color::SetRaw(unsigned char raw[])
 {
-	for (int i = 0; i < bytesPerColor; i++)
+	for (int i = 0; i < 4; i++)
 	{
 		this->raw[i] = raw[i];
 	}
-}
-
-double Color::GetR() const
-{
-	return (double)(r)/255.0f;
-}
-
-double Color::GetG() const
-{
-	return (double)(g) / 255.0f;
-}
-
-double Color::GetB() const
-{
-	return (double)(b) / 255.0f;
-}
-
-double Color::GetA() const
-{
-	return (double)(a) / 255.0f;
-}
-
-void Color::SetR(double r)
-{
-	this->r = r * 255;
-}
-
-void Color::SetG(double g)
-{
-	this->g = g * 255;
-}
-
-void Color::SetB(double b)
-{
-	this->b = b * 255;
-}
-
-void Color::SetA(double a)
-{
-	this->a = a * 255;
+	matchReals();
 }
 
 Color& Color::operator=(const Color& c)
@@ -121,11 +110,11 @@ Color& Color::operator=(const Color& c)
 
 Color Color::operator*(double t)
 {
-	return Color(GetR()*t, GetG()*t, GetB()*t);
+	return Color(R*t, G*t, B*t);
 }
 
 Color Color::operator+(const Color& obj)
 {
-	return Color(GetR() + obj.GetR(), GetG() + obj.GetG(), GetB() + obj.GetB());
+	return Color(R + obj.R, G + obj.G, B + obj.B);
 }
 
