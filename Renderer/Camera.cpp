@@ -89,9 +89,17 @@ Color Camera::rayColor(const Ray& ray, int depth, const Hittable& world) const
 
 	if (world.Hit(ray, Interval(0.001, Infinity), record))
 	{
-		Vector3 direction = record.Normal + Vector3::RandomUnitVector();
-		return rayColor(Ray(record.Position, direction), depth-1, world) * 0.5;
+		//Vector3 direction = record.Normal + Vector3::RandomUnitVector();
+		//return rayColor(Ray(record.Position, direction), depth-1, world) * 0.5;
 		//return Color(record.Normal.X + 1, record.Normal.Y + 1, record.Normal.Z + 1) * 0.5;
+
+		Ray scattered;
+		Color attenuation;
+		if (record.Material.get()->Scatter(ray, record, attenuation, scattered))
+		{
+			return attenuation * rayColor(scattered, depth-1, world);
+		}
+		return Color(0, 0, 0);
 	}
 
 	Vector3 unitDirection = ray.GetDirection().Unit();

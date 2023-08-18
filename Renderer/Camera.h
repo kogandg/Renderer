@@ -5,6 +5,7 @@
 #include "Vector3.h"
 #include "Ray.h"
 #include "Interval.h"
+#include "Material.h"
 #include <iostream>
 #include <tuple>
 #include <vector>

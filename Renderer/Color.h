@@ -40,6 +40,7 @@ public:
 	void SetRaw(unsigned char raw[]);
 
 	Color& operator =(const Color &c);
+	Color operator*(const Color& obj) const;
 	Color operator*(double t);
 	Color operator+(const Color& obj);
 

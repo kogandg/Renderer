@@ -1,9 +1,10 @@
 #include "Sphere.h"
 
-Sphere::Sphere(Vector3 center, double radius)
+Sphere::Sphere(Vector3 center, double radius, shared_ptr<Material> material)
 {
     this->center = center;
     this->radius = radius;
+	this->material = material;
 }
 
 bool Sphere::Hit(const Ray& ray, Interval rayT, HitRecord& record) const
@@ -36,6 +37,7 @@ bool Sphere::Hit(const Ray& ray, Interval rayT, HitRecord& record) const
 	record.Position = ray.At(record.T);
 	Vector3 outwardNormal = (record.Position - center) / radius;
 	record.SetFaceNormal(ray, outwardNormal);
+	record.Material = material;
 
 	return true;
 }

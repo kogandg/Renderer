@@ -4,11 +4,14 @@
 #include "Ray.h"
 #include "Interval.h"
 
+class Material;
+
 class HitRecord
 {
 public:
 	Vector3 Position;
 	Vector3 Normal;
+	shared_ptr<Material> Material;
 	double T;
 	bool FrontFace;
 

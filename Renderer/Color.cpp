@@ -116,6 +116,10 @@ Color& Color::operator=(const Color& c)
 
 	return *this;
 }
+Color Color::operator*(const Color& obj) const
+{
+	return Color(R * obj.R, G * obj.G, B * obj.B);
+}
 
 Color Color::operator*(double t)
 {

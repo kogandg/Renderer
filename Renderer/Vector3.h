@@ -18,8 +18,11 @@ public:
 	double Length();
 	double LengthSquared();
 
+	bool NearZero() const;
+
 	double Dot(const Vector3& v);
 	Vector3 Cross(const Vector3& v);
+	Vector3 Reflect(const Vector3& n);
 
 	Vector3 Unit();
 

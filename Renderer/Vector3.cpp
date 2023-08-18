@@ -31,6 +31,12 @@ double Vector3::LengthSquared()
 	return (X * X) + (Y * Y) + (Z * Z);
 }
 
+bool Vector3::NearZero() const
+{
+	double small = 1e-8;
+	return (fabs(X) < small) && (fabs(Y) < small) && (fabs(Z) < small);
+}
+
 double Vector3::Dot(const Vector3& v)
 {
 	return (X * v.X) + (Y * v.Y) + (Z * v.Z);
@@ -41,9 +47,19 @@ Vector3 Vector3::Cross(const Vector3& v)
 	return Vector3((Y * v.Z) - (Z * v.Y), (Z * v.X) - (X * v.Z), (X * v.Y) - (Y * v.X));
 }
 
+Vector3 Vector3::Reflect(const Vector3& n)
+{
+	return *this - n*Dot(n)*2;
+}
+
 Vector3 Vector3::Unit()
 {
-	return *this / Length();
+	double length = Length();
+	if (length == 0)
+	{
+		return Vector3(0, 0, 0);
+	}
+	return *this / length;
 }
 
 Vector3 Vector3::operator-() const

@@ -8,27 +8,23 @@
 #include "HittableList.h"
 #include "Sphere.h"
 #include "Camera.h"
+#include "Lambertian.h"
+#include "Metal.h"
 
 using namespace std;
 
-Color rayColor(const Ray& ray) {
-	HitRecord record;
-	if (HittableList::Get().Hit(ray, Interval(0, Infinity), record))
-	{
-		return Color(record.Normal.X + 1, record.Normal.Y + 1, record.Normal.Z + 1) * 0.5;
-	}
-
-	Vector3 unitDirection = ray.GetDirection().Unit();
-	double a = (unitDirection.Y + 1.0) * 0.5;
-	return Color(1.0, 1.0, 1.0) * (1.0 - a) + Color(0.5, 0.7, 1.0) * a;
-}
-
 int main()
 {
-
-	//World
-	HittableList::Get().Add(make_shared<Sphere>(Vector3(0, 0, -1), 0.5));
-	HittableList::Get().Add(make_shared<Sphere>(Vector3(0, -100.5, -1), 100));
+	shared_ptr<Material> groundMaterial = make_shared<Lambertian>(Color(0.8, 0.8, 0.0));
+	shared_ptr<Material> centerSphereMaterial = make_shared<Lambertian>(Color(0.7, 0.3, 0.3));
+	shared_ptr<Material> leftSphereMaterial = make_shared<Metal>(Color(0.8, 0.8, 0.8));
+	shared_ptr<Material> rightSphereMaterial = make_shared<Metal>(Color(0.8, 0.6, 0.2));
+	
+	HittableList::Get().Add(make_shared<Sphere>(Vector3(0, -100.5, -1), 100, groundMaterial));
+	HittableList::Get().Add(make_shared<Sphere>(Vector3(0, 0, -1), 0.5, centerSphereMaterial));
+	HittableList::Get().Add(make_shared<Sphere>(Vector3(-1, 0, -1), 0.5, leftSphereMaterial));
+	HittableList::Get().Add(make_shared<Sphere>(Vector3(1, 0, -1), 0.5, rightSphereMaterial));
+	
 
 	Camera camera = Camera(16.0 / 9.0, 400, 100, 50);
 	tuple<int, int, vector<Color>> pixelInfo = camera.Render(HittableList::Get());
