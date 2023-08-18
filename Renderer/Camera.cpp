@@ -4,38 +4,49 @@ Camera::Camera()
 {
 	AspectRatio = 1.0;
 	ImageWidth = 100;
-	
+	SamplesPerPixel = 1;
+
 	center = Vector3(0, 0, 0);
 }
 
-Camera::Camera(double aspectRatio, int imageWidth)
+Camera::Camera(double aspectRatio, int imageWidth, int samples)
 {
 	AspectRatio = aspectRatio;
 	ImageWidth = imageWidth;
+	SamplesPerPixel = samples;
 
 	center = Vector3(0, 0, 0);
 }
 
-void Camera::Render(const Hittable& world, string outFileName)
+tuple<int, int, vector<Color>> Camera::Render(const Hittable& world)
 {
 	initialize();
-	TGAImage image(ImageWidth, imageHeight, 4);
 
+	vector<Color> pixels = vector<Color>(ImageWidth * imageHeight);
 	for (int y = 0; y < imageHeight; y++)
 	{
 		for (int x = 0; x < ImageWidth; x++)
 		{
 			Vector3 pixelCenter = pixel0Center + (pixelDeltaU * x) + (pixelDeltaV * y);
 			Vector3 rayDirection = pixelCenter - center;
-			Ray ray = Ray(center, rayDirection);
 
-			Color color = rayColor(ray, world);
+			Color pixelColor = Color(0, 0, 0);
+			for (int sample = 0; sample < SamplesPerPixel; sample++)
+			{
+				Ray ray = getRay(x, y);
+				pixelColor += rayColor(ray, world);
+			}
+			double scale = 1.0 / SamplesPerPixel;
+			pixelColor = pixelColor * scale;
 
-
-			image.SetPixel(x, y, color);
+			//Ray ray = Ray(center, rayDirection);
+			//Color color = rayColor(ray, world);
+			
+			pixels[x + y * ImageWidth] = pixelColor;
 		}
 	}
-	image.WriteTGAFile(outFileName.c_str());
+
+	return make_tuple(ImageWidth, imageHeight, pixels);
 }
 
 void Camera::initialize()
@@ -74,4 +85,21 @@ Color Camera::rayColor(const Ray& ray, const Hittable& world) const
 	Vector3 unitDirection = ray.GetDirection().Unit();
 	double a = (unitDirection.Y + 1.0) * 0.5;
 	return Color(1.0, 1.0, 1.0) * (1.0 - a) + Color(0.5, 0.7, 1.0) * a;
+}
+
+Ray Camera::getRay(int x, int y) const
+{
+	Vector3 pixelCenter = pixel0Center + (pixelDeltaU * x) + (pixelDeltaV * y);
+	Vector3 pixelSample = pixelCenter + pixelSampleSquare();
+
+	Vector3 rayOrigin = center;
+	Vector3 rayDirection = pixelSample - rayOrigin;
+	return Ray(rayOrigin, rayDirection);
+}
+
+Vector3 Camera::pixelSampleSquare() const
+{
+	double px = -0.5 + randomDouble();
+	double py = -0.5 + randomDouble();
+	return (pixelDeltaU * px) + (pixelDeltaV * py);
 }

@@ -101,8 +101,12 @@ Color& Color::operator=(const Color& c)
 {
 	if (this != &c)
 	{
+		R = c.R;
+		G = c.G;
+		B = c.B;
+		A = c.A;
 		bytesPerColor = c.bytesPerColor;
-		value = c.value;
+		matchRaws();
 	}
 
 	return *this;
@@ -118,3 +122,8 @@ Color Color::operator+(const Color& obj)
 	return Color(R + obj.R, G + obj.G, B + obj.B);
 }
 
+Color& Color::operator+=(const Color& rhs)
+{
+	*this = *this + rhs;
+	return *this;
+}

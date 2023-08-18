@@ -39,5 +39,7 @@ public:
 	Color& operator =(const Color &c);
 	Color operator*(double t);
 	Color operator+(const Color& obj);
+
+	Color& operator+=(const Color& rhs);
 };
 

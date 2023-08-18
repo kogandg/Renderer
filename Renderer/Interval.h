@@ -12,6 +12,8 @@ public:
 	bool Contains(double x) const;
 	bool Surrounds(double x) const;
 
+	double Clamp(double x) const;
+
 	static const Interval Empty;
 	static const Interval Universe;
 };

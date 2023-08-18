@@ -30,6 +30,19 @@ int main()
 	HittableList::Get().Add(make_shared<Sphere>(Vector3(0, 0, -1), 0.5));
 	HittableList::Get().Add(make_shared<Sphere>(Vector3(0, -100.5, -1), 100));
 
-	Camera camera = Camera(16.0/9.0, 400);
-	camera.Render(HittableList::Get(), "out.tga");
+	Camera camera = Camera(16.0 / 9.0, 400, 100);
+	tuple<int, int, vector<Color>> pixelInfo = camera.Render(HittableList::Get());
+
+	int imageWidth = get<0>(pixelInfo);
+	int imageHeight = get<1>(pixelInfo);
+	vector<Color> pixels = get<2>(pixelInfo);
+	TGAImage image = TGAImage(imageWidth, imageHeight, 4);
+	for (int y = 0; y < imageHeight; y++)
+	{
+		for (int x = 0; x < imageWidth; x++)
+		{
+			image.SetPixel(x, y, pixels[x + y * imageWidth]);
+		}
+	}
+	image.WriteTGAFile("out.tga");
 }

@@ -21,3 +21,10 @@ bool Interval::Surrounds(double x) const
 {
 	return Min < x && Max > x;
 }
+
+double Interval::Clamp(double x) const
+{
+	if (x < Min) return Min;
+	if (x > Max) return Max;
+	return x;
+}
