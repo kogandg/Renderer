@@ -1,5 +1,6 @@
 #pragma once
 #include <math.h>
+#include "Helpers.h"
 
 using namespace std;
 
@@ -35,5 +36,11 @@ public:
 
 	Vector3 operator*(double t) const;
 	Vector3 operator/(double t) const;
+
+	static Vector3 Random();
+	static Vector3 Random(double min, double max);
+	static Vector3 RandomInUnitSphere();
+	static Vector3 RandomUnitVector();
+	static Vector3 RandomOnHemisphere(const Vector3& normal);
 };
 

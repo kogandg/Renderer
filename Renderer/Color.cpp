@@ -97,6 +97,11 @@ void Color::SetRaw(unsigned char raw[])
 	matchReals();
 }
 
+Color Color::LinearToGamma()
+{
+	return Color(sqrt(R), sqrt(G), sqrt(B));
+}
+
 Color& Color::operator=(const Color& c)
 {
 	if (this != &c)

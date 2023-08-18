@@ -1,4 +1,5 @@
 #pragma once
+#include <math.h>
 class Color
 {
 private:
@@ -32,6 +33,8 @@ public:
 	double G;
 	double B;
 	double A;
+
+	Color LinearToGamma();
 
 	unsigned char* GetRaw();
 	void SetRaw(unsigned char raw[]);

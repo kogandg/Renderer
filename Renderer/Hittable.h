@@ -1,5 +1,8 @@
 #pragma once
 #include "Helpers.h"
+#include "Vector3.h"
+#include "Ray.h"
+#include "Interval.h"
 
 class HitRecord
 {

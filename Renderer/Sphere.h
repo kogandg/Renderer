@@ -1,6 +1,10 @@
 #pragma once
 #include "Hittable.h"
 #include "Helpers.h"
+#include "Vector3.h"
+#include "Interval.h"
+#include "Ray.h"
+
 
 class Sphere : public Hittable
 {

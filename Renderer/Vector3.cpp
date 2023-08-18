@@ -97,6 +97,43 @@ Vector3 Vector3::operator/(double t) const
 	return Vector3(X / t, Y / t, Z / t);
 }
 
+Vector3 Vector3::Random()
+{
+	return Vector3(randomDouble(), randomDouble(), randomDouble());
+}
+
+Vector3 Vector3::Random(double min, double max)
+{
+	return Vector3(randomDouble(min, max), randomDouble(min, max), randomDouble(min, max));
+}
+
+Vector3 Vector3::RandomInUnitSphere()
+{
+	while (true)
+	{
+		Vector3 point = Random(-1, 1);
+		if (point.LengthSquared() < 1)
+		{
+			return point;
+		}
+	}
+}
+
+Vector3 Vector3::RandomUnitVector()
+{
+	return RandomInUnitSphere().Unit();
+}
+
+Vector3 Vector3::RandomOnHemisphere(const Vector3& normal)
+{
+	Vector3 onUnitSphere = RandomUnitVector();
+	if (onUnitSphere.Dot(normal) > 0.0)
+	{
+		return onUnitSphere;
+	}
+	return -onUnitSphere;
+}
+
 
 
 

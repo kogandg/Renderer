@@ -30,7 +30,7 @@ int main()
 	HittableList::Get().Add(make_shared<Sphere>(Vector3(0, 0, -1), 0.5));
 	HittableList::Get().Add(make_shared<Sphere>(Vector3(0, -100.5, -1), 100));
 
-	Camera camera = Camera(16.0 / 9.0, 400, 100);
+	Camera camera = Camera(16.0 / 9.0, 400, 100, 50);
 	tuple<int, int, vector<Color>> pixelInfo = camera.Render(HittableList::Get());
 
 	int imageWidth = get<0>(pixelInfo);
