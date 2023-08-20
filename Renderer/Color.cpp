@@ -136,3 +136,13 @@ Color& Color::operator+=(const Color& rhs)
 	*this = *this + rhs;
 	return *this;
 }
+
+Color Color::Random()
+{
+	return Color(randomDouble(), randomDouble(), randomDouble());
+}
+
+Color Color::Random(double min, double max)
+{
+	return Color(randomDouble(min, max), randomDouble(min, max), randomDouble(min, max));
+}

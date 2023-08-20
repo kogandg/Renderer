@@ -16,32 +16,62 @@ using namespace std;
 
 int main()
 {
-	shared_ptr<Material> groundMaterial = make_shared<Lambertian>(Color(0.8, 0.8, 0.0));
-	shared_ptr<Material> centerSphereMaterial = make_shared<Lambertian>(Color(0.1, 0.2, 0.5));
-	shared_ptr<Material> leftSphereMaterial = make_shared<Dielectric>(1.5);
-	shared_ptr<Material> rightSphereMaterial = make_shared<Metal>(Color(0.8, 0.6, 0.2), 0.0);
-	
-	HittableList::Get().Add(make_shared<Sphere>(Vector3(0, -100.5, -1), 100, groundMaterial));
-	HittableList::Get().Add(make_shared<Sphere>(Vector3(0, 0, -1), 0.5, centerSphereMaterial));
+	auto groundMaterial = make_shared<Lambertian>(Color(0.5, 0.5, 0.5));
+	HittableList::Get().Add(make_shared<Sphere>(Vector3(0, -1000, 0), 1000, groundMaterial));
 
-	HittableList::Get().Add(make_shared<Sphere>(Vector3(-1, 0, -1), 0.5, leftSphereMaterial));
-	HittableList::Get().Add(make_shared<Sphere>(Vector3(-1, 0, -1), -0.4, leftSphereMaterial));
-
-	HittableList::Get().Add(make_shared<Sphere>(Vector3(1, 0, -1), 0.5, rightSphereMaterial));
+	for (int a = -11; a < 11; a++)
+	{
+		for (int b = -11; b < 11; b++)
+		{
+			auto chooseMaterial = randomDouble();
+			Vector3 center = Vector3(a + 0.9 * randomDouble(), 0.2, b + 0.9 * randomDouble());
+			
+			if ((center - Vector3(4, 0.2, 0)).Length() > 0.9)
+			{
+				shared_ptr<Material> sphereMaterial;
+				
+				if (chooseMaterial < 0.8)//diffuse
+				{
+					Color albedo = Color::Random() * Color::Random();
+					sphereMaterial = make_shared<Lambertian>(albedo);
+				}
+				else if (chooseMaterial < 0.95)//metal
+				{
+					Color albedo = Color::Random(0.5, 1);
+					double fuzz = randomDouble(0, 0.5);
+					sphereMaterial = make_shared<Metal>(albedo, fuzz);
+				}
+				else //glass
+				{
+					sphereMaterial = make_shared<Dielectric>(1.5);
+				}
+				HittableList::Get().Add(make_shared<Sphere>(center, 0.2, sphereMaterial));
+			}
+		}
+	}
 	
+	auto material1 = make_shared<Dielectric>(1.5);
+	HittableList::Get().Add(make_shared<Sphere>(Vector3(0, 1, 0), 1, material1));
+
+	auto material2 = make_shared<Lambertian>(Color(0.4, 0.2, 0.1));
+	HittableList::Get().Add(make_shared<Sphere>(Vector3(-4, 1, 0), 1, material2));
+
+	auto material3 = make_shared<Metal>(Color(0.7, 0.6, 0.5), 0.0);
+	HittableList::Get().Add(make_shared<Sphere>(Vector3(4, 1, 0), 1, material3));
+
 	Camera camera = Camera();
 	camera.AspectRatio = 16.0 / 9.0;
-	camera.ImageWidth = 400;
-	camera.SamplesPerPixel = 100;
+	camera.ImageWidth = 1200;
+	camera.SamplesPerPixel = 500;
 	camera.MaxDepth = 50;
 
 	camera.VFOV = 20;
-	camera.LookFrom = Vector3(-2, 2, 1);
-	camera.LookAt = Vector3(0, 0, -1);
+	camera.LookFrom = Vector3(13, 2, 3);
+	camera.LookAt = Vector3(0, 0, 0);
 	camera.ViewUp = Vector3(0, 1, 0);
 
-	camera.DefocusAngle = 10;
-	camera.FocusDistance = 3.4;
+	camera.DefocusAngle = 0.6;
+	camera.FocusDistance = 10;
 
 	tuple<int, int, vector<Color>> pixelInfo = camera.Render(HittableList::Get());
 
