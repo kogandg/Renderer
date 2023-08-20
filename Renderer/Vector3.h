@@ -44,6 +44,7 @@ public:
 
 	static Vector3 Random();
 	static Vector3 Random(double min, double max);
+	static Vector3 RandomInUnitDisk();
 	static Vector3 RandomInUnitSphere();
 	static Vector3 RandomUnitVector();
 	static Vector3 RandomOnHemisphere(const Vector3& normal);

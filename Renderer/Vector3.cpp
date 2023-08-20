@@ -131,6 +131,18 @@ Vector3 Vector3::Random(double min, double max)
 	return Vector3(randomDouble(min, max), randomDouble(min, max), randomDouble(min, max));
 }
 
+Vector3 Vector3::RandomInUnitDisk()
+{
+	while (true)
+	{
+		Vector3 point = Vector3(randomDouble(-1, 1), randomDouble(-1, 1), 0);
+		if (point.LengthSquared() < 1)
+		{
+			return point;
+		}
+	}
+}
+
 Vector3 Vector3::RandomInUnitSphere()
 {
 	while (true)

@@ -102,7 +102,7 @@
       <Filter>Header Files\Hittables</Filter>
     </ClInclude>
     <ClInclude Include="Dielectric.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\Materials</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
