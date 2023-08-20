@@ -29,5 +29,4 @@ public:
 
 	// Inherited via Hittable
 	bool Hit(const Ray& ray, Interval rayT, HitRecord& rec) const override;
-
 };

@@ -47,9 +47,17 @@ Vector3 Vector3::Cross(const Vector3& v)
 	return Vector3((Y * v.Z) - (Z * v.Y), (Z * v.X) - (X * v.Z), (X * v.Y) - (Y * v.X));
 }
 
-Vector3 Vector3::Reflect(const Vector3& n)
+Vector3 Vector3::Reflect(const Vector3& normal)
 {
-	return *this - n*Dot(n)*2;
+	return *this - normal*Dot(normal)*2;
+}
+
+Vector3 Vector3::Refract(const Vector3& normal, double etaiOverEtat)
+{
+	double cosTheta = fmin((-(*this)).Dot(normal), 1);
+	Vector3 rOutPerpendicular = (*this + normal * cosTheta) * etaiOverEtat;
+	Vector3 rOutParallel = normal * -sqrt(fabs(1.0-rOutPerpendicular.LengthSquared()));
+	return rOutPerpendicular + rOutParallel;
 }
 
 Vector3 Vector3::Unit()

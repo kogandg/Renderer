@@ -1,15 +1,17 @@
 #pragma once
 #include "Material.h"
-class Metal : public Material
+class Dielectric : public Material
 {
 private:
-	Color albedo;
-	double fuzz;
+	double indexOfRefraction;
+
+	static double reflectance(double cosine, double refractionRatio);
 
 public:
-	Metal(const Color& albedo, double fuzz);
+	Dielectric(double indexOfRefraction);
 
 	// Inherited via Material
 	bool Scatter(const Ray& rayIn, const HitRecord& record, Color& attenuation, Ray& scattered) const override;
+
 };
 

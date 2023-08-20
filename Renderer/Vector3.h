@@ -22,7 +22,9 @@ public:
 
 	double Dot(const Vector3& v);
 	Vector3 Cross(const Vector3& v);
-	Vector3 Reflect(const Vector3& n);
+
+	Vector3 Reflect(const Vector3& normal);
+	Vector3 Refract(const Vector3& normal, double etaiOverEtat);
 
 	Vector3 Unit();
 
