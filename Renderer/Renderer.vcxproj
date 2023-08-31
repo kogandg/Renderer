@@ -110,6 +110,9 @@
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
+    <CudaCompile>
+      <GenerateRelocatableDeviceCode>true</GenerateRelocatableDeviceCode>
+    </CudaCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
@@ -126,40 +129,14 @@
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
+    <CudaCompile>
+      <GenerateRelocatableDeviceCode>true</GenerateRelocatableDeviceCode>
+    </CudaCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Camera.cpp" />
-    <ClCompile Include="Color.cpp" />
-    <ClCompile Include="Dielectric.cpp" />
-    <ClCompile Include="Hittable.cpp" />
-    <ClCompile Include="HittableList.cpp" />
-    <ClCompile Include="Interval.cpp" />
-    <ClCompile Include="Lambertian.cpp" />
-    <ClCompile Include="Metal.cpp" />
-    <ClCompile Include="Ray.cpp" />
-    <ClCompile Include="Renderer.cu" />
-    <ClCompile Include="Sphere.cpp" />
-    <ClCompile Include="TGAImage.cpp" />
-    <ClCompile Include="Vector3.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="Camera.h" />
-    <ClInclude Include="Color.h" />
-    <ClInclude Include="Dielectric.h" />
-    <ClInclude Include="Helpers.h" />
-    <ClInclude Include="Hittable.h" />
-    <ClInclude Include="HittableList.h" />
-    <ClInclude Include="Interval.h" />
-    <ClInclude Include="Lambertian.h" />
-    <ClInclude Include="Material.h" />
-    <ClInclude Include="Metal.h" />
-    <ClInclude Include="Ray.h" />
-    <ClInclude Include="Sphere.h" />
-    <ClInclude Include="TGAImage.h" />
-    <ClInclude Include="Vector3.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <Image Include="out.tga" />
+    <CudaCompile Include="Renderer.cu">
+      <FileType>Document</FileType>
+    </CudaCompile>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
