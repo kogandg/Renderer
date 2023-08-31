@@ -1,22 +1,31 @@
-#include "Helpers.h"
+//#include "Helpers.h"
+//
+//#include <iostream>
+//
+//#include "Color.h"
+//#include "TGAImage.h"
+//#include "Hittable.h"
+//#include "HittableList.h"
+//#include "Sphere.h"
+//#include "Camera.h"
+//#include "Lambertian.h"
+//#include "Metal.h"
+//#include "Dielectric.h"
+//
+//using namespace std;
+#include "cuda_runtime.h"
+#include "device_launch_parameters.h"
 
 #include <iostream>
+#include <math.h>
+#include <thrust/host_vector.h>
+#include <thrust/device_vector.h>
 
-#include "Color.h"
-#include "TGAImage.h"
-#include "Hittable.h"
-#include "HittableList.h"
-#include "Sphere.h"
-#include "Camera.h"
-#include "Lambertian.h"
-#include "Metal.h"
-#include "Dielectric.h"
-
-using namespace std;
 
 int main()
 {
-	shared_ptr<Material> groundMaterial = make_shared<Lambertian>(Color(0.8, 0.8, 0.0));
+	thrust::device_vector<int> vectorTest;
+	/*shared_ptr<Material> groundMaterial = make_shared<Lambertian>(Color(0.8, 0.8, 0.0));
 	shared_ptr<Material> centerSphereMaterial = make_shared<Lambertian>(Color(0.1, 0.2, 0.5));
 	shared_ptr<Material> leftSphereMaterial = make_shared<Dielectric>(1.5);
 	shared_ptr<Material> rightSphereMaterial = make_shared<Metal>(Color(0.8, 0.6, 0.2), 0.0);
@@ -56,5 +65,5 @@ int main()
 			image.SetPixel(x, y, pixels[x + y * imageWidth]);
 		}
 	}
-	image.WriteTGAFile("out.tga");
+	image.WriteTGAFile("out.tga");*/
 }

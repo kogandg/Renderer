@@ -21,7 +21,7 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Renderer.cpp">
+    <ClCompile Include="Renderer.cu">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="TGAImage.cpp">

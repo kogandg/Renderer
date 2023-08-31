@@ -54,6 +54,7 @@
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
+    <Import Project="$(VCTargetsPath)\BuildCustomizations\CUDA 12.2.props" />
   </ImportGroup>
   <ImportGroup Label="Shared">
   </ImportGroup>
@@ -136,7 +137,7 @@
     <ClCompile Include="Lambertian.cpp" />
     <ClCompile Include="Metal.cpp" />
     <ClCompile Include="Ray.cpp" />
-    <ClCompile Include="Renderer.cpp" />
+    <ClCompile Include="Renderer.cu" />
     <ClCompile Include="Sphere.cpp" />
     <ClCompile Include="TGAImage.cpp" />
     <ClCompile Include="Vector3.cpp" />
@@ -162,5 +163,6 @@
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
+    <Import Project="$(VCTargetsPath)\BuildCustomizations\CUDA 12.2.targets" />
   </ImportGroup>
 </Project>
