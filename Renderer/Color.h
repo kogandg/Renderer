@@ -1,6 +1,5 @@
 #pragma once
 #include <math.h>
-#include "Helpers.h"
 class Color
 {
 private:
@@ -46,8 +45,5 @@ public:
 	Color operator+(const Color& obj);
 
 	Color& operator+=(const Color& rhs);
-
-	static Color Random();
-	static Color Random(double min, double max);
 };
 
