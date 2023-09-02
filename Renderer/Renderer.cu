@@ -9,6 +9,7 @@ using namespace cimg_library;
 
 #include <iostream>
 #include <time.h>
+#include <math.h>
 
 #include "Color.cuh"
 #include "Ray.cuh"
@@ -47,24 +48,32 @@ void saveFrameBufferToImage(std::string fileName, Color* frameBuffer, int imageX
 
 #pragma endregion
 
-__host__ __device__ bool hitSphere(const Vector3& center, float radius, const Ray& ray) {
+__host__ __device__ double hitSphere(const Vector3& center, float radius, const Ray& ray) {
 	Vector3 oc = ray.GetOrigin() - center;
-	float a = ray.GetDirection().Dot(ray.GetDirection());
-	float b = 2.0f * oc.Dot(ray.GetDirection());
-	float c = oc.Dot(oc) - radius * radius;
-	float discriminant = b * b - 4.0f * a * c;
-	return (discriminant > 0.0f);
+	float a = ray.GetDirection().LengthSquared();
+	float halfB = oc.Dot(ray.GetDirection());
+	float c = oc.LengthSquared() - radius * radius;
+	float discriminant = halfB * halfB - a * c;
+
+	if (discriminant < 0)
+	{
+		return -1.0;
+	}
+	return (-halfB - sqrt(discriminant)) / a;
 }
 
 __host__ __device__ Color rayColor(const Ray& ray)
 {
-	if (hitSphere(Vector3(0, 0, -1), 0.5, ray))
+	double t = hitSphere(Vector3(0, 0, -1), 0.5, ray);
+	if (t > 0.0)
 	{
-		return Color(1, 0, 0);
+		Vector3  normal = (ray.At(t) - Vector3(0, 0, -1)).Unit();
+		return Color(normal.X + 1, normal.Y + 1, normal.Z + 1) * 0.5;
 	}
+
 	Vector3 unitDirection = ray.GetDirection().Unit();
-	float t = 0.5f * (unitDirection.Y + 1.0f);
-	return Color(1.0, 1.0, 1.0) * (1.0 - t) + Color(0.5, 0.7, 1.0) * t;
+	float a = 0.5f * (unitDirection.Y + 1.0f);
+	return Color(1.0, 1.0, 1.0) * (1.0 - a) + Color(0.5, 0.7, 1.0) * a;
 }
 
 __global__ void render(Color* frameBuffer, int maxX, int maxY, Vector3 pixel0Center, Vector3 pixelDeltaU, Vector3 pixelDeltaV, Vector3 cameraCenter)
@@ -142,7 +151,7 @@ int main()
 
 	int numPixels = imageWidth * imageHeight;
 	Color* frameBuffer;
-	
+
 	clock_t start;
 	clock_t stop;
 
@@ -154,7 +163,7 @@ int main()
 		frameBuffer = new Color[numPixels];
 
 		start = clock();
-		
+
 		hostRender(frameBuffer, imageWidth, imageHeight, pixel0Center, pixelDeltaU, pixelDeltaV, cameraCenter);
 
 		stop = clock();
@@ -179,7 +188,7 @@ int main()
 
 		stop = clock();
 	}
-	
+
 	double timerSeconds = ((double)(stop - start)) / CLOCKS_PER_SEC;
 	std::cout << "Rendering took " << timerSeconds << " seconds" << std::endl;
 
