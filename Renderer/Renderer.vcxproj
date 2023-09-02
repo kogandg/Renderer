@@ -134,12 +134,16 @@
     </CudaCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <CudaCompile Include="Color.cu" />
     <CudaCompile Include="Renderer.cu">
       <FileType>Document</FileType>
     </CudaCompile>
+    <CudaCompile Include="Vector3.cu" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CImg.h" />
+    <ClInclude Include="Color.cuh" />
+    <ClInclude Include="Vector3.cuh" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="out.bmp" />

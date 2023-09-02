@@ -9,6 +9,7 @@ using namespace cimg_library;
 
 #include <iostream>
 #include <time.h>
+#include "Color.cuh"
 
 
 #define checkCudaErrors(val) check_cuda( (val), #val, __FILE__, __LINE__ )
@@ -23,7 +24,7 @@ void check_cuda(cudaError_t result, char const* const func, const char* const fi
 	}
 }
 
-__global__ void render(float* frameBuffer, int maxX, int maxY)
+__global__ void render(Color* frameBuffer, int maxX, int maxY)
 {
 	int x = threadIdx.x + blockIdx.x * blockDim.x;
 	int y = threadIdx.y + blockIdx.y * blockDim.y;
@@ -33,38 +34,36 @@ __global__ void render(float* frameBuffer, int maxX, int maxY)
 		return;
 	}
 
-	int pixelIndex = y * maxX * 3 + x * 3;
-	frameBuffer[pixelIndex + 0] = float(x) / maxX;
-	frameBuffer[pixelIndex + 1] = float(y) / maxY;
-	frameBuffer[pixelIndex + 2] = 0.2;
+	int pixelIndex = y * maxX + x;
+	frameBuffer[pixelIndex] = Color(float(x) / maxX, float(y) / maxY, 0.2);
 }
 
-void hostRender(float* frameBuffer, int maxX, int maxY)
+void hostRender(Color* frameBuffer, int maxX, int maxY)
 {
 	for (int y = 0; y < maxY; y++)
 	{
 		for (int x = 0; x < maxX; x++)
 		{
-			int pixelIndex = y * maxX * 3 + x * 3;
-			frameBuffer[pixelIndex + 0] = float(x) / maxX;
-			frameBuffer[pixelIndex + 1] = float(y) / maxY;
-			frameBuffer[pixelIndex + 2] = 0.2;
+			int pixelIndex = y * maxX + x;
+			frameBuffer[pixelIndex].R = float(x) / maxX;
+			frameBuffer[pixelIndex].G = float(y) / maxY;
+			frameBuffer[pixelIndex].B = 0.2;
 		}
 	}
 }
 
-void saveFrameBufferToImage(std::string fileName, float* frameBuffer, int imageX, int imageY)
+void saveFrameBufferToImage(std::string fileName, Color* frameBuffer, int imageX, int imageY)
 {
 	CImg<unsigned char> image(imageX, imageY, 1, 3, 0);
 	for (int y = 0; y < imageY; y++)
 	{
 		for (int x = 0; x < imageX; x++)
 		{
-			int pixelIndex = y * 3 * imageX + x * 3;
+			int pixelIndex = y * imageX + x;
 			unsigned char color[3];
-			color[0] = 256 * frameBuffer[pixelIndex];
-			color[1] = 256 * frameBuffer[pixelIndex + 1];
-			color[2] = 256 * frameBuffer[pixelIndex + 2];
+			color[0] = 256 * frameBuffer[pixelIndex].R;
+			color[1] = 256 * frameBuffer[pixelIndex].G;
+			color[2] = 256 * frameBuffer[pixelIndex].B;
 			image.draw_point(x, y, color);
 		}
 	}
@@ -73,8 +72,8 @@ void saveFrameBufferToImage(std::string fileName, float* frameBuffer, int imageX
 
 int main()
 {
-	int* cudaDevices = 0;
-	cudaGetDeviceCount(cudaDevices);
+	int cudaDevices = 0;
+	cudaGetDeviceCount(&cudaDevices);
 
 	int imageX = 1200;
 	int imageY = 600;
@@ -82,18 +81,18 @@ int main()
 	int threadY = 8;
 
 	int numPixels = imageX * imageY;
-	size_t frameBufferSize = 3 * numPixels * sizeof(float);
 
-	float* frameBuffer;
+	Color* frameBuffer;
 	
 	clock_t start;
 	clock_t stop;
 
+	cudaDevices = 0;
 	if (cudaDevices == 0)
 	{
 		std::cout << "No cuda devices" << std::endl;
 
-		frameBuffer = new float[frameBufferSize];
+		frameBuffer = new Color[numPixels];
 
 		start = clock();
 		
@@ -103,6 +102,7 @@ int main()
 	}
 	else
 	{
+		size_t frameBufferSize = numPixels * sizeof(Color);
 		checkCudaErrors(cudaMallocManaged((void**)&frameBuffer, frameBufferSize));
 
 		start = clock();
