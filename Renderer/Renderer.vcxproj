@@ -135,6 +135,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <CudaCompile Include="Color.cu" />
+    <CudaCompile Include="Ray.cu" />
     <CudaCompile Include="Renderer.cu">
       <FileType>Document</FileType>
     </CudaCompile>
@@ -143,6 +144,7 @@
   <ItemGroup>
     <ClInclude Include="CImg.h" />
     <ClInclude Include="Color.cuh" />
+    <ClInclude Include="Ray.cuh" />
     <ClInclude Include="Vector3.cuh" />
   </ItemGroup>
   <ItemGroup>
